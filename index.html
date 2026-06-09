@@ -6,7 +6,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #000; width: 100vw; height: 100vh; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
+        #player { width: 100%; height: 100%; border: none; }
         #placeholder { 
             color: #fff; 
             display: flex; 
@@ -19,13 +19,24 @@
     </style>
 </head>
 <body>
-    <div id="placeholder">No video loaded. Paste a URL in Cinema Player.</div>
-    <iframe id="player" style="display:none" allow="autoplay; fullscreen"></iframe>
+    <div id="placeholder">No video loaded.</div>
+    <iframe id="player" style="display:none" 
+        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+        allowfullscreen
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation">
+    </iframe>
 
     <script>
         function getParam(name) {
-            const url = new URL(window.location.href);
-            return url.searchParams.get(name);
+            return new URL(window.location.href).searchParams.get(name);
+        }
+
+        function getYouTubeEmbedUrl(url) {
+            const match = url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+            if (match) {
+                return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=0`;
+            }
+            return url;
         }
 
         const videoUrl = getParam("url");
@@ -33,7 +44,7 @@
             document.getElementById("placeholder").style.display = "none";
             const player = document.getElementById("player");
             player.style.display = "block";
-            player.src = videoUrl + (videoUrl.includes('?') ? '&' : '?') + 'autoplay=0';
+            player.src = getYouTubeEmbedUrl(videoUrl);
         }
     </script>
 </body>
