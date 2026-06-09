@@ -33,7 +33,7 @@
             document.getElementById("placeholder").style.display = "none";
             const player = document.getElementById("player");
             player.style.display = "block";
-            player.src = videoUrl;
+            player.src = videoUrl + (videoUrl.includes('?') ? '&' : '?') + 'autoplay=0';
         }
     </script>
 </body>
