@@ -31,13 +31,31 @@
             return new URL(window.location.href).searchParams.get(name);
         }
 
-        function getYouTubeEmbedUrl(url) {
-            const match = url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
-            if (match) {
-                return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=0`;
-            }
-            return url;
+<script>
+    function getParam(name) {
+        return new URL(window.location.href).searchParams.get(name);
+    }
+
+    const videoUrl = getParam("url");
+    if (videoUrl) {
+        document.getElementById("placeholder").style.display = "none";
+        const isYouTube = videoUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+        
+        if (isYouTube) {
+            const player = document.getElementById("player");
+            player.style.display = "block";
+            player.src = `https://www.youtube.com/embed/${isYouTube[1]}?autoplay=1`;
+        } else {
+            document.getElementById("player").style.display = "none";
+            const video = document.createElement("video");
+            video.src = videoUrl;
+            video.style = "width:100%;height:100%;";
+            video.autoplay = true;
+            video.controls = true;
+            document.body.appendChild(video);
         }
+    }
+</script>
 
         const videoUrl = getParam("url");
         if (videoUrl) {
