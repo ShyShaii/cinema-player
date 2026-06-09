@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cinema Player</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; width: 100vw; height: 100vh; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; }
+        #placeholder { 
+            color: #fff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh;
+            font-family: Arial;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="placeholder">No video loaded. Paste a URL in Cinema Player.</div>
+    <iframe id="player" style="display:none"></iframe>
+
+    <script>
+        function getParam(name) {
+            const url = new URL(window.location.href);
+            return url.searchParams.get(name);
+        }
+
+        function getYouTubeId(url) {
+            const match = url.match(/(?:v=|youtu\.be\/)([^&?/]+)/);
+            return match ? match[1] : null;
+        }
+
+        const videoUrl = getParam("url");
+        if (videoUrl) {
+            const ytId = getYouTubeId(videoUrl);
+            if (ytId) {
+                document.getElementById("placeholder").style.display = "none";
+                const player = document.getElementById("player");
+                player.style.display = "block";
+                player.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1`;
+            }
+        }
+    </script>
+</body>
+</html>
